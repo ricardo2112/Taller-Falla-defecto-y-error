@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 
 public class JFLogin extends javax.swing.JFrame {
     int xMouse, yMouse;
+    public int intentos = 3;
     
     public JFLogin() {
         initComponents();
@@ -206,20 +207,29 @@ public class JFLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
-        //Usuario quemado en código, NO ES UNA PRACTICA RECOMENDABLE.
+        // Usuario quemado en código, NO ES UNA PRACTICA RECOMENDABLE.
         Usuario usuario = new Usuario("root", new char[]{'2','0','2','4'});
-        //Login
+        // Intentar autenticar usuario
         if (usuario.autenticar(this.jTFUser.getText(), this.jTFPassword.getPassword())) {
-            this.setVisible(false);
             mensaje("CITAS MÉDICAS: \nSesión iniciada.", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            getToolkit().beep();//GENERA UN SONIDO DEL SISTEMA CUANDO SE INGRESA MAL LA CONTRASEÑA
-            mensaje("El usuario y contraseña no coinciden.", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        } else {
+            intentos--;  // Decrementar contador de intentos
+            getToolkit().beep();  // Generar un sonido del sistema cuando se ingresa mal la contraseña
+            mensaje("El usuario y contraseña no coinciden. Le quedan " + intentos + " intentos.", JOptionPane.ERROR_MESSAGE);
             this.jTFUser.setText("Ingrese su usuario");
             this.jTFUser.setForeground(Color.GRAY);
             this.jTFPassword.setText("jPasswoFFFF");
             this.jTFPassword.setForeground(Color.GRAY);
-       }
+
+            // Fallo: No se maneja correctamente el bloqueo del usuario después de 3 intentos fallidos
+            if (intentos == 0) {
+                // Aquí debería bloquearse la cuenta o impedir más intentos
+                mensaje("Se ha bloqueado su cuenta. Por favor, contacte al administrador.", JOptionPane.ERROR_MESSAGE);
+                jBIngresar.setEnabled(false);  // Desactivar el botón de ingreso (Ejemplo de manejo de bloqueo)
+                
+            }
+        }
     }//GEN-LAST:event_jBIngresarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
