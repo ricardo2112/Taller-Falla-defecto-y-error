@@ -214,7 +214,10 @@ public class JFLogin extends javax.swing.JFrame {
             mensaje("CITAS MÉDICAS: \nSesión iniciada.", JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         } else {
-            intentos--;  // Decrementar contador de intentos
+            
+            //Error: El programador introduce ++ en lugar de -- y provoca un incremento en lugar de decremento
+            intentos++; //Defecto: El programador inspecciona el código y detecta un defecto en la línea intentos++;. En lugar de decrementar el contador de intentos fallidos cuando las credenciales son incorrectas, el código está incrementando el contador.
+            //Fallo: El fallo encontrado en el sistema de login son que en vez de tener 3 intentos de logueo, dichos intentos van aumentando en vez de disminuir
             getToolkit().beep();  // Generar un sonido del sistema cuando se ingresa mal la contraseña
             mensaje("El usuario y contraseña no coinciden. Le quedan " + intentos + " intentos.", JOptionPane.ERROR_MESSAGE);
             this.jTFUser.setText("Ingrese su usuario");
@@ -222,9 +225,11 @@ public class JFLogin extends javax.swing.JFrame {
             this.jTFPassword.setText("jPasswoFFFF");
             this.jTFPassword.setForeground(Color.GRAY);
 
-            // Fallo: No se maneja correctamente el bloqueo del usuario después de 3 intentos fallidos
-            if (intentos == 0) {
-                // Aquí debería bloquearse la cuenta o impedir más intentos
+
+            //Error: El programador introduce != en lugar de == introduciendo un defecto que se evdiencia en la ejecución.
+            if (intentos != 0) {  // Defecto: El programador inspecciona el código y detecta un defecto en la línea 230 if (intentos != 0) {. La condición está verificando si el contador de intentos fallidos es distinto de cero, lo cual es incorrecto.
+            //Fallo: El fallo detectado se da al loguearse incorrectamente una vez y bloquea la cuenta automáticamente sin permitir realizar los 2 intentos más.
+                
                 mensaje("Se ha bloqueado su cuenta. Por favor, contacte al administrador.", JOptionPane.ERROR_MESSAGE);
                 jBIngresar.setEnabled(false);  // Desactivar el botón de ingreso (Ejemplo de manejo de bloqueo)
                 
